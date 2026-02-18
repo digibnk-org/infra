@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  customer-db:
+    image: postgres:16-alpine
+    container_name: digibnk-customer-db
+    environment:
+      POSTGRES_DB: digibnk_customer
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+    volumes:
+      - customer_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  account-db:
+    container_name: digibnk-account-db
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: digibnk_account
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5434:5432"
+    volumes:
+      - account_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  customer_db_data:
+  account_db_data:
